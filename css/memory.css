@@ -1,0 +1,130 @@
+/* General */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  height: 100%;
+}
+body .jumbotron {
+  width: 100%;
+  height: 100px;
+  background-color: lightgray;
+  text-align: center;
+}
+body .container {
+  width: 1080px;
+  margin: 0 auto;
+  display: grid;
+}
+body .container.scores {
+  text-align: center;
+}
+body .container.scores .play {
+  animation-name: play;
+  animation-duration: 1s;
+  animation-direction: alternate-reverse;
+  animation-iteration-count: infinite;
+  cursor: pointer;
+}
+body .container.game {
+  transform-style: preserve-3d;
+  perspective: 500px;
+  min-height: 100%;
+  height: 100%;
+}
+body .container .card {
+  float: left;
+  width: 16.6666%;
+  height: 150px;
+  padding: 5px;
+  text-align: center;
+  display: block;
+  perspective: 500px;
+  position: relative;
+  cursor: pointer;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+body .container .card .inside {
+  width: 100%;
+  height: 100%;
+  display: block;
+  transform-style: preserve-3d;
+  transition: 0.4s ease-in-out;
+  background: white;
+}
+body .container .card .inside.picked, body .container .card .inside.matched {
+  transform: rotateY(180deg);
+}
+body .container .card .inside.matched {
+  animation: 1s matchAnim ease-in-out;
+  animation-delay: 0.4s;
+}
+body .container .card .front, body .container .card .back {
+  border: 1px solid black;
+  backface-visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+}
+body .container .card .front img, body .container .card .back img {
+  max-width: 100%;
+  display: block;
+  margin: 0 auto;
+  max-height: 100%;
+}
+body .container .card .front {
+  transform: rotateY(-180deg);
+}
+body .container .card .back {
+  transform: rotateX(0);
+}
+body #pbarContainer {
+  width: 100%;
+  border: grey 1px solid;
+  display: block;
+}
+body #pbarContainer #pbar {
+  width: 0;
+  height: 30px;
+  background-color: blue;
+}
+
+/** Animations **/
+@keyframes play {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes matchAnim {
+  0% {
+    background: #bcffcc;
+  }
+  100% {
+    background: white;
+  }
+}
+@keyframes progress {
+  0% {
+    width: 0;
+    background-color: green;
+  }
+  80% {
+    background-color: green;
+  }
+  85% {
+    background-color: red;
+  }
+  100% {
+    width: 100%;
+    background-color: red;
+  }
+}
+
+/*# sourceMappingURL=memory.css.map */

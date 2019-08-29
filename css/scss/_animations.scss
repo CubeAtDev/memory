@@ -1,0 +1,30 @@
+@keyframes play {
+    0% {opacity: 1;}
+    100% {opacity: 0;}
+}
+
+@keyframes matchAnim {
+	0% {
+		background: #bcffcc;
+	}
+	100% {
+		background: white;
+	}
+}
+
+@keyframes progress{
+    0% {
+        width: 0;
+        background-color: green;
+    }
+    80%{
+        background-color: green;
+    }
+    85% {
+        background-color: red;
+    }
+    100% {
+        width: 100%;
+        background-color: red;
+    }
+}
