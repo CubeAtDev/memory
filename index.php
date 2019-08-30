@@ -41,14 +41,19 @@ $scores = $scoreManager->best();
   </div>
   <div class="container scores">
     <h2>Meilleurs chronos</h2>
-    <ul class="scoreList">
-        <?php 
-        foreach( $scores as $score){
-            $time = $score->getTime() / 1000;
-            echo '<li>' . $time . ' secondes</li>';
-        }
-        ?>
-    </ul>
+    <?php
+    if(!empty($scores)){ ?>
+      <ul class="scoreList">
+          <?php 
+          foreach( $scores as $score){
+              $time = $score->getTime() / 1000;
+              echo '<li>' . $time . ' secondes</li>';
+          }
+          ?>
+      </ul>
+        <?php }else{
+          echo 'Il n\'y pas encore de chrono enregistré';
+        } ?>
     <h3 class="play">Cliquez ici pour jouer !</h3>
   </div>
   <div class="container">
