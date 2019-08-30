@@ -1,7 +1,5 @@
 <?php
 
-namespace Memory;
-
 class Mysql
 {
     protected $host,
@@ -42,5 +40,4 @@ class Mysql
         @mysql_close($this->sql_connect_id);
     }
 
-    /*  Les fonctions qui seront ajoutée ensuite contiendront les query */
 }

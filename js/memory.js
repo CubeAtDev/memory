@@ -1,5 +1,5 @@
 $(document).ready(function() {
-
+	// définition des objets card
     var cards = [
 		{
 			name: "red apple",
@@ -62,46 +62,50 @@ $(document).ready(function() {
 			id: 12
         },
 	];
-    
+	
+	// le jeu en lui-même
 	var Memory = {
 		init: function(cards){
-			this.$game = $(".game");
-			this.$modal = $(".modal");
-            this.$overlay = $(".modal-overlay");
-            this.$time = false;
-            this.$timer;
+			this.game = $(".game");
+            this.time = false;
+            this.timer;
             this.score = 0;
 			this.cardsArray = $.merge(cards, cards); // Ici on merge le tableau avec lui même afin d'éviter les répititions de code
 			this.shuffleCards(this.cardsArray);
 			this.setup();
 		},
 		shuffleCards: function(cardsArray){
-			this.$cards = $(this.shuffle(this.cardsArray));
+			this.cards = $(this.shuffle(this.cardsArray));
 		},
 		setup: function(){
 			this.html = this.buildHTML();
-			this.$game.html(this.html);
-			this.$memoryCards = $(".card");
+			this.game.html(this.html);
+			this.memoryCards = $(".card");
 			this.paused = false;
      	    this.guess = null;
 			this.binding();
 		},
 		binding: function(){
-			this.$memoryCards.on("click", this.cardClicked);
+			this.memoryCards.on("click", this.cardClicked);
 		},
 		
 		cardClicked: function(){
 			var _ = Memory;
-            var $card = $(this);
+			var card = $(this);
+			// lancement du chrono au premier clic sur une carte
             if( !_.time){
                 _.time = true;
                 _.timer = setInterval( function(){
-                    _.score = _.score + 10; 
-                }, 10);
+					_.score = _.score + 100; 
+					if(Memory.score >= 60000){
+						Memory.loose();
+					}
+                }, 100);
                 _.progress();
-            }
-			if(!_.paused && !$card.find(".inside").hasClass("matched") && !$card.find(".inside").hasClass("picked")){
-				$card.find(".inside").addClass("picked");
+			}
+			// controle des cartes sélectionnées
+			if(!_.paused && !card.find(".inside").hasClass("matched") && !card.find(".inside").hasClass("picked")){
+				card.find(".inside").addClass("picked");
 				if(!_.guess){
 					_.guess = $(this).attr("data-id");
 				} else if(_.guess == $(this).attr("data-id") && !$(this).hasClass("picked")){
@@ -120,37 +124,46 @@ $(document).ready(function() {
 				}
 			}
         },
-        
+		
+		// démarage de l'animation de la progress bar
         progress: function(){
             $('#pbar').css("animation-name", "progress");
             $('#pbar').css("animation-duration", "60s");
             $('#pbar').css("animation-timing-function", "linear");
             $('#pbar').css("animation-iteration-count", "1");
-            var timer = 0;
-            if(timer >= 60000){
-                Memory.loose();
-            }
         },
 
+		// en cas de défaite
         loose: function(){
+			alert('Vous avez perdu, pas de chance !')
+			window.location.href = "index.php";
             this.paused = true;
-            setTimeout(function(){
-				Memory.showModal();
-                Memory.$game.fadeOut();
-                $('#pbar').hide();
-			}, 1000)
+			$('#pbar').hide(500);
         },
 
+		// en cas de victoire
 		win: function(){
-            this.paused = true;
+			this.paused = true;
+			// on stop le chrono et l'animation de la progress bar
             clearInterval(Memory.timer);
-            console.log(Memory.score);
-            $('#pbar').css("animation-play-state", "paused");   
-            $.post( "index.php", { score: Memory.score  })
-                .done(function( data ){
-                alert(data);
-
-                });
+			$('#pbar').css("animation-play-state", "paused");   
+			// envoi du chrono à php pour qu'il puisse être traité
+			$.post( "index.php", { score: Memory.score  })
+				// si le chrono a bien été réceptionné
+                .done(function(  ){
+					alert('Incroyable, vous avez réussi !');
+					window.location.href = "index.php";
+				})
+				/* si le chrono n'a pas pu être récéptionné par php
+				 pour le débuggage, il est possible de faire :
+						.fail(function(data){
+							alert(data);
+						})
+				la fenêtre d'erreur affichera alors le message d'erreur retourné */
+				.fail(function() {
+					alert( "Vous avez gagné ! Cependant pour des raisons techniques, votre temps n'a pas pu être sauvegardé" );
+					window.location.href = "index.php";
+				})
 		},
 
         // Cette fonction n'a d'autre but que d'améliorer l'aléatoire du mélange.
@@ -171,9 +184,10 @@ $(document).ready(function() {
 	    	return array;
 		},
 
+		// génération du tableau des cartes 
 		buildHTML: function(){
 			var frag = '';
-			this.$cards.each(function(key, value){
+			this.cards.each(function(key, value){
 				frag += '<div class="card" data-id="'+ value.id +'"><div class="inside">\
 				<div class="front"><img src="'+ value.img +'"\
 				alt="'+ value.name +'" /></div>\
@@ -185,9 +199,11 @@ $(document).ready(function() {
 		}
 	};
 
+	// initialisation de la page d'accueil
     $('.game').hide();
     $('#pbarContainer').hide();
 
+	// affichage et lancement d'une instance du jeu au clic
     $('.play').click(function(){
         $('.scores').hide();
         $('.game').show(500);

@@ -1,6 +1,6 @@
 <?php
 
-
+/* La création d'un autolload très simple permet de charger automatiquement les class nécessaire lorsque celle-ci sont appelées */
 spl_autoload_register(function ($class_name) {
     include 'lib/class/' . $class_name . '.php';
 });
@@ -17,9 +17,10 @@ $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 
 $scoreManager = new ScoreManager($db);
 
+// On traite ici les chrono reçus via la méthode post
 if($_POST){
-    $score = new Score((int)$_POST['score']);
-    $scoreManager->add($score);
+    $score = new Score((int)$_POST['score']); // création d'un nouvel objet Score
+    $scoreManager->add($score); // Enristrement de ce dernier en BDD
 }
 
 $scores = $scoreManager->best();
@@ -39,7 +40,7 @@ $scores = $scoreManager->best();
     <h1>Jeu de mémoire</h1>
   </div>
   <div class="container scores">
-    <h2>Meilleurs temps</h2>
+    <h2>Meilleurs chronos</h2>
     <ul class="scoreList">
         <?php 
         foreach( $scores as $score){

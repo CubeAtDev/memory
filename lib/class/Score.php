@@ -1,7 +1,5 @@
 <?php
 
-//namespace Memory;
-
 class Score
 {
     private $time;

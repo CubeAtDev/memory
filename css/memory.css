@@ -5,12 +5,16 @@
 
 body {
   height: 100%;
+  background-color: whitesmoke;
 }
 body .jumbotron {
   width: 100%;
   height: 100px;
   background-color: lightgray;
   text-align: center;
+}
+body .jumbotron h1 {
+  padding-top: 30px;
 }
 body .container {
   width: 1080px;
@@ -19,6 +23,9 @@ body .container {
 }
 body .container.scores {
   text-align: center;
+}
+body .container.scores .scoreList {
+  list-style: none;
 }
 body .container.scores .play {
   animation-name: play;

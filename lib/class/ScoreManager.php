@@ -1,7 +1,5 @@
 <?php
 
-//namespace Memory;
-
 class ScoreManager
 {
     private $_db;
@@ -19,6 +17,7 @@ class ScoreManager
     }
 
     /* Query */
+
     public function add(Score $score)
     {
         $q = $this->_db->prepare("INSERT INTO times(time) VALUES (:time)");
@@ -33,7 +32,7 @@ class ScoreManager
     {
         $scores= [];
 
-        $q = $this->_db->prepare("SELECT time FROM times  ORDER BY time DESC LIMIT 5");
+        $q = $this->_db->prepare("SELECT time FROM times  ORDER BY time ASC LIMIT 5");
         $q->execute();
 
         while ($datas = $q->fetch(PDO::FETCH_ASSOC)){
